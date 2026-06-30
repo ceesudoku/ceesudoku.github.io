@@ -1465,6 +1465,7 @@ position: relative;
               let finished = false;
               let menuOpen = false;
 			  let winmenuOpen = false;
+			let pageMode = "dark";
               function showWinScreen() {
             winDifficulty.textContent =
                 difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
@@ -1478,7 +1479,34 @@ position: relative;
                 winOverlay.classList.add("show");
             });
         }
-        
+        function changemode() {
+    const wheel = document.getElementById("modeWheel");
+
+    if (pageMode === "light") {
+        document.body.className = "dark";
+        pageMode = "dark";
+        wheel.style.transform = "translateY(0)";
+        return;
+    }
+
+    document.body.className = "light";
+    pageMode = "light";
+    wheel.style.transform = "translateY(-50px)";
+
+    if (document.readyState === "complete") {
+        document.body.className = "dark";
+        pageMode = "dark";
+        wheel.style.transform = "translateY(0)";
+    } else {
+        window.addEventListener("load", function restoreDark() {
+            window.removeEventListener("load", restoreDark);
+
+            document.body.className = "dark";
+            pageMode = "dark";
+            wheel.style.transform = "translateY(0)";
+        });
+    }
+}
         function hideWinScreen() {
             winOverlay.classList.remove("show");
         
@@ -1516,38 +1544,11 @@ position: relative;
                 }
                 return boxes[boxIndex(row, col)].every((cellIndex) => grid[cellIndex] !== value);
               }
-			let pageMode = "dark";
+			
 
-let pageMode = "dark";
 
-function changeMode() {
-    const wheel = document.getElementById("modeWheel");
 
-    if (pageMode === "light") {
-        document.body.className = "dark";
-        pageMode = "dark";
-        wheel.style.transform = "translateY(0)";
-        return;
-    }
 
-    document.body.className = "light";
-    pageMode = "light";
-    wheel.style.transform = "translateY(-50px)";
-
-    if (document.readyState === "complete") {
-        document.body.className = "dark";
-        pageMode = "dark";
-        wheel.style.transform = "translateY(0)";
-    } else {
-        window.addEventListener("load", function restoreDark() {
-            window.removeEventListener("load", restoreDark);
-
-            document.body.className = "dark";
-            pageMode = "dark";
-            wheel.style.transform = "translateY(0)";
-        });
-    }
-}
         
               function fillGrid(grid, index = 0) {
                 if (index === 81) return true;
