@@ -1599,23 +1599,21 @@ function changemode() {
 
 
 
-let startTime;
-let pausedElapsed = 0;
-let timerId;
+let elapsedMs = 0;
+let startTime = 0;
+let timerId = null;
 let timerPaused = false;
-let timerRestoredFromSave = false;
-function pauseTimer() {
-    timerPaused = true;
-
+			function startTimer() {
     clearInterval(timerId);
 
-    // freeze exact time
-    elapsedMs = Date.now() - startTime;
+    startTime = Date.now() - elapsedMs;
 
-    pauseBtn.textContent = "▶";
-    title.textContent = "Sudoku - Paused";
+    timerId = setInterval(() => {
+        elapsedMs = Date.now() - startTime;
 
-    saveGame();
+        timerEl.textContent =
+            `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+    }, 100);
 }
 function pauseTimer() {
     if (!timerPaused) {
@@ -1639,6 +1637,16 @@ function pauseTimer() {
         pauseBtn.textContent = "❚❚";
         title.textContent = "Sudoku";
     }
+}
+			function resumeTimer() {
+    if (!timerPaused) return;
+
+    timerPaused = false;
+
+    startTimer();
+
+    pauseBtn.textContent = "❚❚";
+    title.textContent = "Sudoku";
 }
         
               function renderBoard() {
@@ -1781,8 +1789,7 @@ function saveGame() {
         pencilMode,
         eraseMode,
         mistakes,
-        elapsed,
-        pausedElapsed,
+        elapsedMs,
         timerPaused,
         undoStack,
         redoStack,
@@ -2264,14 +2271,22 @@ function loadGame() {
     pencilMode = game.pencilMode;
     eraseMode = game.eraseMode;
     mistakes = game.mistakes;
-    elapsed = game.elapsed;
-    pausedElapsed = game.pausedElapsed;
-    timerPaused = game.timerPaused;
+
+    elapsedMs = game.elapsedMs || 0;
+    timerPaused = game.timerPaused || false;
+
     undoStack = game.undoStack;
     redoStack = game.redoStack;
     pageMode = game.pageMode;
 
     paintBoard();
+
+    if (!timerPaused) {
+        startTimer();
+    } else {
+        timerEl.textContent =
+            `Time: ${formatTime(Math.floor(elapsedMs / 1000))}`;
+    }
 }
 function newGame(nextDifficulty = difficulty) {
     difficulty = nextDifficulty;
