@@ -3,9 +3,9 @@
 
 ### **Features:**
 - **Fully installable, right from your browser** (Your browser will prompt you to install it)
-- **Dark mode** (Which is default)
+- **Dark mode and light mode** (Dark mode is default)
 - **Auto Soduku generation**
 - **Works offline** (As long as you have opened the installed version at least once before with internet)
 - **Multiple difficulties**
 
-#### **Website link:** [Ceedoku.github.io](ceedoku.github.io)
+**Find the game here: [Ceedoku.github.io](https://ceedoku.github.io)**
